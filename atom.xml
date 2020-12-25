@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://cyberasbeel.github.io</id>
     <title>Asbeel</title>
-    <updated>2020-12-23T15:17:03.861Z</updated>
+    <updated>2020-12-25T02:18:43.072Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://cyberasbeel.github.io"/>
     <link rel="self" href="https://cyberasbeel.github.io/atom.xml"/>
@@ -10,6 +10,146 @@
     <logo>https://cyberasbeel.github.io/images/avatar.png</logo>
     <icon>https://cyberasbeel.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Asbeel</rights>
+    <entry>
+        <title type="html"><![CDATA[Windows下32位PE文件学习]]></title>
+        <id>https://cyberasbeel.github.io/post/windows-xia-32-wei-pe-wen-jian-xue-xi/</id>
+        <link href="https://cyberasbeel.github.io/post/windows-xia-32-wei-pe-wen-jian-xue-xi/">
+        </link>
+        <updated>2020-12-24T13:22:10.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="什么是pe">什么是PE</h1>
+<p>PE全称为<strong>Portable Executable</strong>, PE文件即为Windows下可移植的可执行文件, 常见的有exe, dll, sys等文件.</p>
+<h2 id="pe文件的基本结构">PE文件的基本结构</h2>
+<p>PE文件一般可分为四个部分:</p>
+<ul>
+<li>DOS头</li>
+<li>PE头</li>
+<li>节表</li>
+<li>节</li>
+</ul>
+<p>上述四个部分中PE头相比其它三个部分要复杂的多.<br>
+而我们平常所说的<strong>PE文件头</strong>其实就是由DOS头 + PE头 + 节表这三个部分所组成的, <strong>PE文件身体</strong>就是节.</p>
+<h1 id="pe文件头">PE文件头</h1>
+<h2 id="dos头">DOS头</h2>
+<p>32位PE文件之所以还保留DOS头就是为了与16位系统的兼容.<br>
+DOS头分为两个部分:</p>
+<ul>
+<li>DOS MZ头</li>
+<li>DOS Stub</li>
+</ul>
+<p>DOS MZ头的结构如下:</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>大小(byte)</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>e_magic</td>
+<td>2</td>
+<td>可执行文件标志, &quot;MZ&quot;</td>
+</tr>
+<tr>
+<td>e_cblp</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_cp</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_crlc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_cparhdr</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_minalloc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_maxalloc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_ss</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_sp</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_csum</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_ip</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_cs</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_lfarlc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_ovno</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_res[4]</td>
+<td>2*4</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>e_oemid</td>
+<td>2</td>
+<td>OEM标识符</td>
+</tr>
+<tr>
+<td>e_oeminfo</td>
+<td>2</td>
+<td>OEM信息</td>
+</tr>
+<tr>
+<td>e_res2[10]</td>
+<td>2*10</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>e_lfanew</td>
+<td>4</td>
+<td>PE头的偏移地址</td>
+</tr>
+</tbody>
+</table>
+<p>表格中描述为空的成员都是仅在16位系统中生效, 对32位PE文件来说没有作用的.<br>
+在DOS头结构中, <strong>e_magic</strong>和<strong>e_lfanew</strong>这两个成员尤其重要.</p>
+<blockquote>
+<p>e_magic其值为&quot;<strong>MZ</strong>&quot;, 是DOS系统的创始人之一, Mark Zbikowski的缩写. e_magic的值是Windows操作系统判断文件是否为正确的PE文件格式的依据之一.</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Windows下32位汇编程序的开发环境搭建]]></title>
         <id>https://cyberasbeel.github.io/post/masm32sdk/</id>
