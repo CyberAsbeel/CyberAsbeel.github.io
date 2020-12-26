@@ -34,11 +34,10 @@
           </p>
           <div class="toc-container hidden lg:block">
             <ul class="markdownIt-TOC">
-<li>
-<ul>
-<li><a href="#%E7%89%B9%E6%80%A7">特性👇</a></li>
-</ul>
-</li>
+<li><a href="#masm32-sdk%E7%9A%84%E7%AE%80%E4%BB%8B">MASM32 SDK的简介</a></li>
+<li><a href="#masm32-sdk%E7%9A%84%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85">MASM32 SDK的下载与安装</a></li>
+<li><a href="#masm32-sdk%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE">MASM32 SDK的环境变量配置</a></li>
+<li><a href="#%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AAwin32%E6%B1%87%E7%BC%96%E7%A8%8B%E5%BA%8F">编写一个Win32汇编程序</a></li>
 </ul>
 
           </div>
@@ -85,41 +84,81 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">Hello Gridea</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">Windows下32位汇编程序的开发环境搭建</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2018-12-12 / 2 min read
+          2020-12-23 / 2 min read
         </div>
         
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_23/1/cover.png" alt="">
+        
         <div class="post-content yue">
-          <!-- more -->
-<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+          <h1 id="masm32-sdk的简介">MASM32 SDK的简介</h1>
+<p><strong>MASM32 SDK</strong>是一个由个人开发的汇编开发工具包, 非常便于学习或编写Win32汇编程序, 是目前最流行的Win32汇编开发工具包, 具体信息可以参考<a href="http://masm32.com/">MASM32</a>官网首页的描述.</p>
+<h1 id="masm32-sdk的下载与安装">MASM32 SDK的下载与安装</h1>
+<p>官方下载链接: <a href="http://www.masm32.com/download/masm32v11r.zip">http://www.masm32.com/download/masm32v11r.zip</a></p>
+<p>下载后将压缩包内的install.exe解压出来运行, 点击下图所圈位置, 选择好安装盘符即可自动安装.<br>
+<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_23/1/masm32sdk_install.png" alt="masm32sdk_install.png" loading="lazy"></p>
+<h1 id="masm32-sdk的环境变量配置">MASM32 SDK的环境变量配置</h1>
+<p>待全部安装完成后, 即可开始配置用户环境变量, 分别在include, lib, path变量中添加你MASM32的安装路径加上\include, \ib, \path. 如C:\masm32\include, C:\masm32\lib, C:\masm32\lib.</p>
+<h1 id="编写一个win32汇编程序">编写一个Win32汇编程序</h1>
+<ol>
+<li>新建一个Win32Asm.asm文件, 编写如下代码:</li>
+</ol>
+<pre><code class="language-Assembly">; 显示一个&quot;Hello, World!&quot;的信息框
+.386
+.model flat, stdcall
+option casemap: none
+
+include windows.inc
+include user32.inc
+include kernel32.inc
+
+includelib user32.lib
+includelib kernel32.lib
+
+.const
+g_szText db &quot;Hello, World!&quot;, 0
+g_szCaption db &quot;Win32Asm&quot;, 0
+
+.code
+
+entry:
+	INVOKE MessageBox, 0, offset g_szText, offset g_szCaption, MB_OK
+	INVOKE ExitProcess, 0
+
+end entry
+</code></pre>
+<ol start="2">
+<li>打开cmd, 定位到Win32Asm.asm文件所在目录</li>
+<li>输入ml /c /coff win32asm.asm 回车</li>
+<li>输入link /subsystem:windows win32asm.obj 回车</li>
+<li>运行所生成的win32asm.exe文件, 效果如下:<br>
+<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_23/1/win32asm.exe.png" alt="win32asm.exe.png" loading="lazy"></li>
+</ol>
 
         </div>
 
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://cyberasbeel.github.io/tag/1IXs9e6GA/">
+            <span class="flex-auto">环境配置</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://cyberasbeel.github.io/tag/Pqr3LfDIF/">
+            <span class="flex-auto">汇编</span>
+          </a>
         
 
 
         <div class="flex justify-between py-8">
+          
+            <div class="prev-post">
+              <a href="https://cyberasbeel.github.io/post/2/">
+                <h3 class="post-title">
+                  <i class="ri-arrow-left-line"></i>
+                  Windows下32位PE文件学习
+                </h3>
+              </a>
+            </div>
           
 
           

@@ -34,11 +34,18 @@
           </p>
           <div class="toc-container hidden lg:block">
             <ul class="markdownIt-TOC">
-<li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AFpe">什么是PE</a>
 <ul>
-<li><a href="#%E7%89%B9%E6%80%A7">特性👇</a></li>
+<li><a href="#pe%E6%96%87%E4%BB%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%BB%93%E6%9E%84">PE文件的基本结构</a></li>
 </ul>
 </li>
+<li><a href="#dos%E5%A4%B4">DOS头</a>
+<ul>
+<li><a href="#dos-mz%E5%A4%B4">DOS MZ头</a></li>
+<li><a href="#dos-stub">DOS Stub</a></li>
+</ul>
+</li>
+<li><a href="#pe%E5%A4%B4">PE头</a></li>
 </ul>
 
           </div>
@@ -85,34 +92,153 @@
 <div class="mask" onclick="closeMenu()">
 </div>
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
-        <h1 class="text-3xl font-bold lg:mt-16">Hello Gridea</h1>
+        <h1 class="text-3xl font-bold lg:mt-16">Windows下32位PE文件学习</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2018-12-12 / 2 min read
+          2020-12-24 / 3 min read
         </div>
         
         <div class="post-content yue">
-          <!-- more -->
-<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
-✍️  <strong>Gridea</strong> 一个静态博客写作客户端。你可以用它来记录你的生活、心情、知识、笔记、创意... ...</p>
-<!-- more -->
-<p><a href="https://github.com/getgridea/gridea">Github</a><br>
-<a href="https://gridea.dev/">Gridea 主页</a><br>
-<a href="http://fehey.com/">示例网站</a></p>
-<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+          <h1 id="什么是pe">什么是PE</h1>
+<p>PE全称为<strong>Portable Executable</strong>, PE文件即为Windows下可移植的可执行文件, 常见的有exe, dll, sys等文件.</p>
+<h2 id="pe文件的基本结构">PE文件的基本结构</h2>
+<p>PE文件一般可分为四个部分:</p>
+<ul>
+<li>DOS头</li>
+<li>PE头</li>
+<li>节表</li>
+<li>节</li>
+</ul>
+<p>上述四个部分中PE头相比其它三个部分要复杂的多.<br>
+而我们平常所说的<strong>PE文件头</strong>其实就是由DOS头 + PE头 + 节表这三个部分所组成的, <strong>PE文件身体</strong>就是节.</p>
+<h1 id="dos头">DOS头</h1>
+<p>32位PE文件之所以还保留DOS头就是为了与16位系统的兼容.<br>
+DOS头分为两个部分:</p>
+<ul>
+<li>DOS MZ头</li>
+<li>DOS Stub</li>
+</ul>
+<h2 id="dos-mz头">DOS MZ头</h2>
+<p>DOS MZ头的结构如下:</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>大小(byte)</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>e_magic</td>
+<td>2</td>
+<td>可执行文件标志, &quot;MZ&quot;</td>
+</tr>
+<tr>
+<td>e_cblp</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_cp</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_crlc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_cparhdr</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_minalloc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_maxalloc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_ss</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_sp</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_csum</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_ip</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_cs</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_lfarlc</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_ovno</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>e_res[4]</td>
+<td>2*4</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>e_oemid</td>
+<td>2</td>
+<td>OEM标识符</td>
+</tr>
+<tr>
+<td>e_oeminfo</td>
+<td>2</td>
+<td>OEM信息</td>
+</tr>
+<tr>
+<td>e_res2[10]</td>
+<td>2*10</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>e_lfanew</td>
+<td>4</td>
+<td>PE头的偏移地址</td>
+</tr>
+</tbody>
+</table>
+<p>表格中描述为空的成员都是仅在16位系统中生效, 对32位PE文件来说没有作用的.<br>
+在DOS头结构中, <strong>e_magic</strong>和<strong>e_lfanew</strong>这两个成员尤其重要.</p>
+<ul>
+<li>e_magic其值为&quot;<strong>MZ</strong>&quot;, 是DOS系统的创始人之一, Mark Zbikowski的缩写. e_magic的值是Windows操作系统判断文件是否为正确的PE文件格式的依据之一.</li>
+<li>e_lfanew的值是PE头相对于PE文件头的偏移地址, 因为DOS头中DOS Stub的大小是不固定的, 从而导致DOS头大小也是不固定的, 故紧跟DOS头后面的PE头位置需要用e_lfanew的值来确定.</li>
+</ul>
+<p>e_magic和e_lfanew的值若发生改动, Windows操作系统就会认定该PE文件的格式非法.</p>
+<h2 id="dos-stub">DOS Stub</h2>
+<p>DOS Stub是一段指令代码, 使用WinHex(一款十六进制编辑器)打开任意一个32位PE文件.<br>
+<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/winhex_pe.png" alt="winhex_pe.png" loading="lazy"></p>
+<p>我所选中的字节码处, 即为DOS Stub, 随后使用IDA Pro以MS-DOS executable文件格式载入该PE文件, DOS Stub的反汇编代码如下图:<br>
+<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/ida_disassemble_win32pe.png" alt="ida_disassemble_win32pe.png" loading="lazy"></p>
+<p>其主要作用是使PE文件在MS-DOS系统下运行时, 在屏幕显示&quot;This program cannot be run in DOS mode.&quot;的字符串. 随后退出软件. 因为此次学习内容主要是围绕32位环境进行的, 故此处不作过多叙述.</p>
+<h1 id="pe头">PE头</h1>
 
         </div>
 
@@ -122,6 +248,15 @@
         <div class="flex justify-between py-8">
           
 
+          
+            <div class="next-post">
+              <a href="https://cyberasbeel.github.io/post/1/">
+                <h3 class="post-title">
+                  Windows下32位汇编程序的开发环境搭建
+                  <i class="ri-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
           
         </div>
 
