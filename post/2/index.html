@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asbeel</title>
 <meta name="description" content="Asbeel's blog" />
-<link rel="shortcut icon" href="https://cyberasbeel.github.io/favicon.ico?v=1609049463873">
+<link rel="shortcut icon" href="https://cyberasbeel.github.io/favicon.ico?v=1609076823449">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://cyberasbeel.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://cyberasbeel.github.io/images/avatar.png?v=1609049463873" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://cyberasbeel.github.io/images/avatar.png?v=1609076823449" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Asbeel</h1>
       </div>
@@ -43,6 +43,13 @@
 <ul>
 <li><a href="#dos-mz%E5%A4%B4">DOS MZ头</a></li>
 <li><a href="#dos-stub">DOS Stub</a></li>
+</ul>
+</li>
+<li><a href="#nt%E5%A4%B4image_nt_headers">NT头(IMAGE_NT_HEADERS)</a>
+<ul>
+<li><a href="#pe%E6%A0%87%E8%AE%B0signature">PE标记(Signature)</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%A4%B4image_file_header">文件头(IMAGE_FILE_HEADER)</a></li>
+<li><a href="#%E5%8F%AF%E9%80%89%E5%A4%B4image_optional_header">可选头(IMAGE_OPTIONAL_HEADER)</a></li>
 </ul>
 </li>
 </ul>
@@ -93,7 +100,7 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">Windows下32位PE文件学习</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-12-26 / 3 min read
+          2020-12-27 / 4 min read
         </div>
         
           <img class="post-feature-image rounded-lg mx-auto my-4" src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/cover.jpg" alt="">
@@ -105,12 +112,12 @@
 <p>PE文件一般可分为四个部分:</p>
 <ul>
 <li>DOS头</li>
-<li>PE头</li>
+<li>NT头</li>
 <li>节表</li>
 <li>节</li>
 </ul>
 <p>上述四个部分中PE头相比其它三个部分要复杂的多.<br>
-而我们平常所说的<strong>PE文件头</strong>其实就是由DOS头 + PE头 + 节表这三个部分所组成的, <strong>PE文件身体</strong>就是节.</p>
+而我们平常所说的<strong>PE文件头</strong>其实就是由DOS头 + NT头 + 节表这三个部分所组成的, <strong>PE文件身体</strong>就是节.</p>
 <h1 id="dos头">DOS头</h1>
 <p>32位PE文件之所以还保留DOS头就是为了与16位系统的兼容.<br>
 DOS头分为两个部分:</p>
@@ -230,7 +237,7 @@ DOS头分为两个部分:</p>
 在DOS头结构中, <strong>e_magic</strong>和<strong>e_lfanew</strong>这两个成员尤其重要.</p>
 <ul>
 <li>e_magic其值为&quot;<strong>MZ</strong>&quot;, 是DOS系统的创始人之一, Mark Zbikowski的缩写. e_magic的值是Windows操作系统判断文件是否为正确的PE文件格式的依据之一.</li>
-<li>e_lfanew的值是PE头相对于PE文件头的偏移地址, 因为DOS头中DOS Stub的大小是不固定的, 从而导致DOS头大小也是不固定的, 故紧跟DOS头后面的PE头位置需要用e_lfanew的值来确定.</li>
+<li>e_lfanew的值是PE头相对于PE文件头的偏移地址, 因为DOS头中DOS Stub的大小是不固定的, 从而导致DOS头大小也是不固定的, 故紧跟DOS头后面的NT头位置需要用e_lfanew的值来确定.</li>
 </ul>
 <p>e_magic和e_lfanew的值若发生改动, Windows操作系统就会认定该PE文件的格式非法.</p>
 <h2 id="dos-stub">DOS Stub</h2>
@@ -239,6 +246,71 @@ DOS头分为两个部分:</p>
 <p>我所选中的字节码处, 即为DOS Stub, 随后使用IDA Pro以MS-DOS executable文件格式载入该PE文件, DOS Stub的反汇编代码如下图:<br>
 <img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/ida_disassemble_win32pe.png" alt="ida_disassemble_win32pe.png" loading="lazy"></p>
 <p>其主要作用是使PE文件在MS-DOS系统下运行时, 在屏幕显示&quot;This program cannot be run in DOS mode.&quot;的字符串. 随后退出软件. 因为此次学习内容主要是围绕32位环境进行的, 故此处不作过多叙述.</p>
+<h1 id="nt头image_nt_headers">NT头(IMAGE_NT_HEADERS)</h1>
+<p>NT头又名PE头, 其结构如下:</p>
+<pre><code class="language-C++">typedef struct _IMAGE_NT_HEADERS {
+    DWORD Signature; // PE标识
+    IMAGE_FILE_HEADER FileHeader; // 文件头
+    IMAGE_OPTIONAL_HEADER32 OptionalHeader; // 可选头
+} IMAGE_NT_HEADERS32, *PIMAGE_NT_HEADERS32;
+</code></pre>
+<h2 id="pe标记signature">PE标记(Signature)</h2>
+<p>该PE标记位于DOS MZ头结构中e_lfanew所指的位置, 四个字节大小, 其hex值为<strong>50 45 00 00</strong>, 对应的ASCII码字符串为&quot;<strong>PE\0\0</strong>&quot;. PE标记也是判断文件是否为标准PE文件格式的依据.</p>
+<h2 id="文件头image_file_header">文件头(IMAGE_FILE_HEADER)</h2>
+<p>文件头又名标准PE头, 其结构如下:</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>大小(byte)</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Machine</td>
+<td>2</td>
+<td>标识该文件只能在某个特定CPU类型的机器上运行</td>
+</tr>
+<tr>
+<td>NumberOfSections</td>
+<td>2</td>
+<td>节的数量</td>
+</tr>
+<tr>
+<td>TimeDateStamp</td>
+<td>4</td>
+<td>时间戳, 文件的创建时间</td>
+</tr>
+<tr>
+<td>PointerToSymbolTable</td>
+<td>4</td>
+<td>符号表的偏移</td>
+</tr>
+<tr>
+<td>NumberOfSymbols</td>
+<td>4</td>
+<td>符号表的数量</td>
+</tr>
+<tr>
+<td>SizeOfOptionalHeader</td>
+<td>2</td>
+<td>可选头的大小</td>
+</tr>
+<tr>
+<td>Characteristics</td>
+<td>2</td>
+<td>这个标记表明该文件的属性</td>
+</tr>
+</tbody>
+</table>
+<p>下面具体描述一下其中两个成员</p>
+<ul>
+<li>Machine我们一般接触到的只有两个值, 在32位PE中是IMAGE_FILE_MACHINE_I386(0x14C),<br>
+表明该文件可以在I386或更新的处理器上和兼容的处理器上运行. 另一个是在64位PE文件中, 其值为IMAGE_FILE_MACHINE_IA64, 表面该文件只能在Intel Itanium系列处理器(64位CPU)上运行.</li>
+<li>Characteristics的值是按位(bit)构成的, 每一位的值都含有一个信息. 有效的32位PE文件中一般是0x10F, 由IMAGE_FILE_RELOCS_STRIPPED(0x1), IMAGE_FILE_EXECUTABLE_IMAGE(0x2), IMAGE_FILE_LINE_NUMS_STRIPPED(0x4), IMAGE_FILE_LOCAL_SYMS_STRIPPED(0x8), IMAGE_FILE_32BIT_MACHINE(0x100)这4个位组成.</li>
+</ul>
+<h2 id="可选头image_optional_header">可选头(IMAGE_OPTIONAL_HEADER)</h2>
 
         </div>
 
