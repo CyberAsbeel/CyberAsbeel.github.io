@@ -4,13 +4,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asbeel</title>
 <meta name="description" content="一位学习软件逆向工程的菜鸡" />
-<link rel="shortcut icon" href="http://localhost:4000/favicon.ico?v=1609123543359">
+<link rel="shortcut icon" href="https://cyberasbeel.github.io/favicon.ico?v=1609160978054">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
 
-<link rel="stylesheet" href="http://localhost:4000/styles/main.css">
+<link rel="stylesheet" href="https://cyberasbeel.github.io/styles/main.css">
 
 
 
@@ -22,8 +22,8 @@
     <div class="sidebar-content">
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
-        <a href="http://localhost:4000">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="http://localhost:4000/images/avatar.png?v=1609123543359" alt="">
+        <a href="https://cyberasbeel.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://cyberasbeel.github.io/images/avatar.png?v=1609160978054" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Asbeel</h1>
       </div>
@@ -41,7 +41,7 @@
 </li>
 <li><a href="#dos%E5%A4%B4">DOS头</a>
 <ul>
-<li><a href="#dos-mz%E5%A4%B4">DOS MZ头</a></li>
+<li><a href="#dos-mz%E5%A4%B4image_dos_header">DOS MZ头(IMAGE_DOS_HEADER)</a></li>
 <li><a href="#dos-stub">DOS Stub</a></li>
 </ul>
 </li>
@@ -92,7 +92,7 @@
   </div>
   <div class="site-footer">
     <div class="py-4 text-gray-700">Powered by <a href="https://www.baidu.com" target="_blank">Asbeel</a></div>
-    <a class="rss" href="http://localhost:4000/atom.xml" target="_blank">RSS</a>
+    <a class="rss" href="https://cyberasbeel.github.io/atom.xml" target="_blank">RSS</a>
   </div>
 </div>
 <div class="mask" onclick="closeMenu()">
@@ -100,10 +100,10 @@
       <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
         <h1 class="text-3xl font-bold lg:mt-16">Windows下32位PE文件学习</h1>
         <div class="text-sm text-gray-700 lg:my-8">
-          2020-12-27 / 4 min read
+          2020-12-26 / 6 min read
         </div>
         
-          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/cover.jpg" alt="">
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2/cover.jpg" alt="">
         
         <div class="post-content yue">
           <h1 id="什么是pe">什么是PE</h1>
@@ -125,7 +125,7 @@ DOS头分为两个部分:</p>
 <li>DOS MZ头</li>
 <li>DOS Stub</li>
 </ul>
-<h2 id="dos-mz头">DOS MZ头</h2>
+<h2 id="dos-mz头image_dos_header">DOS MZ头(IMAGE_DOS_HEADER)</h2>
 <p>DOS MZ头的结构如下:</p>
 <table>
 <thead>
@@ -240,11 +240,37 @@ DOS头分为两个部分:</p>
 <li>e_lfanew的值是PE头相对于PE文件头的偏移地址, 因为DOS头中DOS Stub的大小是不固定的, 从而导致DOS头大小也是不固定的, 故紧跟DOS头后面的NT头位置需要用e_lfanew的值来确定.</li>
 </ul>
 <p>e_magic和e_lfanew的值若发生改动, Windows操作系统就会认定该PE文件的格式非法.</p>
+<p>下面尝试编写一个控制台程序输出自身DOS MZ头成员的值</p>
+<pre><code class="language-C++">#include &lt;iostream&gt;
+#include &lt;windows.h&gt;
+
+using namespace std;
+
+void OutputDOSHeader()
+{
+	PIMAGE_DOS_HEADER pDosHeader = reinterpret_cast&lt;PIMAGE_DOS_HEADER&gt;(GetModuleHandle(nullptr));
+	if (pDosHeader == nullptr)
+		cout &lt;&lt; &quot;failed!&quot; &lt;&lt; endl;
+
+	cout &lt;&lt; hex &lt;&lt; uppercase // 以十六进制和大写的格式输出
+		&lt;&lt; pDosHeader-&gt;e_magic &lt;&lt; endl // 偷懒, 就输出两个较为重要的成员的值
+		&lt;&lt; pDosHeader-&gt;e_lfanew &lt;&lt; endl;
+}
+
+int main()
+{
+	OutputDOSHeader();
+
+	cin.get();
+	return 0;
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2/outputdosheader.png" alt="outputdosheader.png" loading="lazy"></figure>
 <h2 id="dos-stub">DOS Stub</h2>
 <p>DOS Stub是一段指令代码, 使用WinHex(一款十六进制编辑器)打开任意一个32位PE文件.<br>
-<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/winhex_pe.png" alt="winhex_pe.png" loading="lazy"></p>
+<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2/winhex_pe.png" alt="winhex_pe.png" loading="lazy"></p>
 <p>我所选中的字节码处, 即为DOS Stub, 随后使用IDA Pro以MS-DOS executable文件格式载入该PE文件, DOS Stub的反汇编代码如下图:<br>
-<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2020_12_26/2/ida_disassemble_win32pe.png" alt="ida_disassemble_win32pe.png" loading="lazy"></p>
+<img src="https://githubpages-blog-image.oss-cn-beijing.aliyuncs.com/blog_image/2/ida_disassemble_win32pe.png" alt="ida_disassemble_win32pe.png" loading="lazy"></p>
 <p>其主要作用是使PE文件在MS-DOS系统下运行时, 在屏幕显示&quot;This program cannot be run in DOS mode.&quot;的字符串. 随后退出软件. 因为此次学习内容主要是围绕32位环境进行的, 故此处不作过多叙述.</p>
 <h1 id="nt头image_nt_headers">NT头(IMAGE_NT_HEADERS)</h1>
 <p>NT头又名PE头, 其结构如下:</p>
@@ -312,11 +338,56 @@ DOS头分为两个部分:</p>
 </ul>
 <p><strong>TimeDateStamp</strong>, <strong>PointerToSymbolTable</strong>, <strong>NumberOfSymbols</strong>这三个成员的值是可以被篡改的, 被修改后也不影响PE文件正常执行, 故这三个成员的值并不可靠, 仅供参考.</p>
 <h2 id="可选头image_optional_header">可选头(IMAGE_OPTIONAL_HEADER)</h2>
+<p>不要被OPTIONAL这个名称迷惑, 虽然表面意思看着像是可选的, 无关紧要的, 但是可选头里面包含了许多重要信息, 因为文件头的结构远不足以充分描述一个PE文件的信息, 故才有了可选头来进行补充扩展, 将其称为扩展头或扩展PE头才更为合适.</p>
+<p>可选头的结构如下:</p>
+<pre><code class="language-C++">typedef struct _IMAGE_OPTIONAL_HEADER {
+    //
+    // Standard fields.
+    //
+
+    WORD    Magic; // 魔术字
+    BYTE    MajorLinkerVersion; // 链接器的主版本号
+    BYTE    MinorLinkerVersion; // 链接器的次版本号
+    DWORD   SizeOfCode; // 
+    DWORD   SizeOfInitializedData;
+    DWORD   SizeOfUninitializedData;
+    DWORD   AddressOfEntryPoint;
+    DWORD   BaseOfCode;
+    DWORD   BaseOfData;
+
+    //
+    // NT additional fields.
+    //
+
+    DWORD   ImageBase;
+    DWORD   SectionAlignment;
+    DWORD   FileAlignment;
+    WORD    MajorOperatingSystemVersion;
+    WORD    MinorOperatingSystemVersion;
+    WORD    MajorImageVersion;
+    WORD    MinorImageVersion;
+    WORD    MajorSubsystemVersion;
+    WORD    MinorSubsystemVersion;
+    DWORD   Win32VersionValue;
+    DWORD   SizeOfImage;
+    DWORD   SizeOfHeaders;
+    DWORD   CheckSum;
+    WORD    Subsystem;
+    WORD    DllCharacteristics;
+    DWORD   SizeOfStackReserve;
+    DWORD   SizeOfStackCommit;
+    DWORD   SizeOfHeapReserve;
+    DWORD   SizeOfHeapCommit;
+    DWORD   LoaderFlags;
+    DWORD   NumberOfRvaAndSizes;
+    IMAGE_DATA_DIRECTORY DataDirectory[IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
+} IMAGE_OPTIONAL_HEADER32, *PIMAGE_OPTIONAL_HEADER32;
+</code></pre>
 
         </div>
 
         
-          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="http://localhost:4000/tag/ZUloZX8e0/">
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://cyberasbeel.github.io/tag/ZUloZX8e0/">
             <span class="flex-auto">PE</span>
           </a>
         
@@ -327,7 +398,7 @@ DOS头分为两个部分:</p>
 
           
             <div class="next-post">
-              <a href="http://localhost:4000/post/1/">
+              <a href="https://cyberasbeel.github.io/post/1/">
                 <h3 class="post-title">
                   Windows下32位汇编程序的开发环境搭建
                   <i class="ri-arrow-right-line"></i>
@@ -368,7 +439,7 @@ DOS头分为两个部分:</p>
       </div>
     </div>
 
-    <script src="http://localhost:4000/media/prism.js"></script>  
+    <script src="https://cyberasbeel.github.io/media/prism.js"></script>  
 <script>
 
 Prism.highlightAll()
