@@ -3,8 +3,8 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Asbeel</title>
-<meta name="description" content="一位学习软件逆向工程的菜鸡" />
-<link rel="shortcut icon" href="https://cyberasbeel.github.io/favicon.ico?v=1609160978054">
+<meta name="description" content="笨鸟先飞罢了!" />
+<link rel="shortcut icon" href="https://cyberasbeel.github.io/favicon.ico?v=1609300012976">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -23,7 +23,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="ri-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://cyberasbeel.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://cyberasbeel.github.io/images/avatar.png?v=1609160978054" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://cyberasbeel.github.io/images/avatar.png?v=1609300012976" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">Asbeel</h1>
       </div>
@@ -348,12 +348,12 @@ int main()
     WORD    Magic; // 魔术字
     BYTE    MajorLinkerVersion; // 链接器的主版本号
     BYTE    MinorLinkerVersion; // 链接器的次版本号
-    DWORD   SizeOfCode; // 
-    DWORD   SizeOfInitializedData;
-    DWORD   SizeOfUninitializedData;
-    DWORD   AddressOfEntryPoint;
-    DWORD   BaseOfCode;
-    DWORD   BaseOfData;
+    DWORD   SizeOfCode; // 代码节的大小, 如果有多个代码节, 则为所有代码节大小之和
+    DWORD   SizeOfInitializedData; 已初始化的数据节大小, 性质同上
+    DWORD   SizeOfUninitializedData; // 未初始化的数据节大小, 性质同上
+    DWORD   AddressOfEntryPoint; // 程序执行入口RVA
+    DWORD   BaseOfCode; // 代码节的起始位置RVA
+    DWORD   BaseOfData; // 数据节的起始位置RVA
 
     //
     // NT additional fields.
